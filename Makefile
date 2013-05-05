@@ -5,7 +5,7 @@ clean: cleanCodeCppUTest cleanCodeMsp430
 prog: program
 
 program: codeMsp430
-	mspdebug rf2500 "prog hello.elf"
+	make -i -f MakefileMSP430.mk program
 
 codeCppUTest: CppUTest
 	make -i -f MakefileCppUTest.mk 

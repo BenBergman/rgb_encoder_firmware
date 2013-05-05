@@ -1,5 +1,5 @@
-#include <msp430g2553.h>   /* Genericizable */
-//#include <msp430.h>
+//#include <msp430g2553.h>   /* Genericizable */
+#include <msp430.h>
 
 #define pin6mask  (0x01 << 6)
 
@@ -23,7 +23,7 @@ int main(void) {
          * This approach may not work with all compilers.
          */
         volatile int i;
-        for( i = 0; i < 20000; i++ );
+        for( i = 0; i < 30000; i++ );
 
         /* Toggle the state of pin 6 on port 1 by exclusive or'ing with
            the mask that represents that pin. */
