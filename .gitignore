@@ -3,4 +3,5 @@
 *.txt
 *.map
 *.d
+*_tests
 lib/
