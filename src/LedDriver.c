@@ -10,8 +10,16 @@ void LedDriver_Create(uint8_t *leds)
 
 void LedDriver_TurnOn(int led)
 {
-	*ledsAddress = 1;
-	(void)led;
+	switch (led) {
+		case 1:
+			*ledsAddress ^= 0x01;
+			break;
+		case 2:
+			*ledsAddress ^= 0x20;
+			break;
+		default:
+			break;
+	}
 }
 
 void LedDriver_TurnOff(int led)
