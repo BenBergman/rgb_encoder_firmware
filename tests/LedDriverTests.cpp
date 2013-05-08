@@ -49,3 +49,11 @@ TEST(LedDriver, TurnLedOneOnTwice)
 	LedDriver_TurnOn(1);
 	CHECK_EQUAL(1, virtualLeds);
 }
+
+TEST(LedDriver, TurnOffAnyLed)
+{
+	LedDriver_TurnOn(1);
+	LedDriver_TurnOn(2);
+	LedDriver_TurnOff(2);
+	CHECK_EQUAL(0x01, virtualLeds);
+}
