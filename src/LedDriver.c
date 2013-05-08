@@ -12,10 +12,10 @@ void LedDriver_TurnOn(int led)
 {
 	switch (led) {
 		case 1:
-			*ledsAddress ^= 0x01;
+			*ledsAddress |= 0x01;
 			break;
 		case 2:
-			*ledsAddress ^= 0x20;
+			*ledsAddress |= 0x20;
 			break;
 		default:
 			break;
