@@ -40,7 +40,7 @@ TEST(LedDriver, TurnOnMultipleLeds)
 {
 	LedDriver_TurnOn(1);
 	LedDriver_TurnOn(2);
-	CHECK_EQUAL(0x21, virtualLeds);
+	CHECK_EQUAL(0x41, virtualLeds);
 }
 
 TEST(LedDriver, TurnLedOneOnTwice)
@@ -53,7 +53,7 @@ TEST(LedDriver, TurnLedOneOnTwice)
 TEST(LedDriver, TurnOnAllLeds)
 {
 	LedDriver_TurnAllOn();
-	CHECK_EQUAL(0x21, virtualLeds);
+	CHECK_EQUAL(0x41, virtualLeds);
 }
 
 TEST(LedDriver, TurnOffAnyLed)
@@ -62,4 +62,28 @@ TEST(LedDriver, TurnOffAnyLed)
 	LedDriver_TurnOn(2);
 	LedDriver_TurnOff(2);
 	CHECK_EQUAL(0x01, virtualLeds);
+}
+
+TEST(LedDriver, TurnOffAllLeds)
+{
+	LedDriver_TurnAllOn();
+	LedDriver_TurnAllOff();
+	CHECK_EQUAL(0x00, virtualLeds);
+}
+
+TEST(LedDriver, AllOnMasksUnusedBits)
+{
+	LedDriver_TurnAllOn();
+	CHECK_EQUAL(0x41, virtualLeds);
+	virtualLeds = 0xFF;
+	CHECK_EQUAL(0xFF, virtualLeds);
+}
+
+TEST(LedDriver, AllOffMasksUnusedBits)
+{
+	LedDriver_TurnAllOff();
+	CHECK_EQUAL(0x00, virtualLeds);
+	virtualLeds = 0xff;
+	LedDriver_TurnAllOff();
+	CHECK_EQUAL(0xBE, virtualLeds);
 }

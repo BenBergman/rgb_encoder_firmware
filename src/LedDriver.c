@@ -1,16 +1,13 @@
 #include "LedDriver.h"
 
-enum {
-	ALL_LEDS_ON = 0x21,
-	ALL_LEDS_OFF = 0x00
-};
+static const uint8_t ALL_LEDS_ON = 0x41;
 
 uint8_t *ledsAddress;
 
 void LedDriver_Create(uint8_t *leds)
 {
 	ledsAddress = leds;
-	*ledsAddress = ALL_LEDS_OFF;
+	*ledsAddress = 0;
 }
 
 static uint8_t convertLedNumberToBit(int ledNumber)
@@ -19,7 +16,7 @@ static uint8_t convertLedNumberToBit(int ledNumber)
 		case 1:
 			return 0x01;
 		case 2:
-			return 0x20;
+			return 0x40;
 		default:
 			return 0;
 	}
@@ -38,4 +35,9 @@ void LedDriver_TurnOff(int led)
 void LedDriver_TurnAllOn(void)
 {
 	*ledsAddress |= ALL_LEDS_ON;
+}
+
+void LedDriver_TurnAllOff(void)
+{
+	*ledsAddress &= (uint8_t)(~ALL_LEDS_ON);
 }
