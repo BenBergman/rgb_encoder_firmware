@@ -4,5 +4,6 @@
 #include <stdint.h>
 
 uint8_t I2C_Read(void);
+void I2C_Write(uint8_t data);
 
 #endif /* end of include guard: I2C_H_IXML6WWR */

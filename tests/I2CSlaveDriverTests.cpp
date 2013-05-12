@@ -6,10 +6,10 @@ extern "C"
 #include "I2CSlaveDriver.h"
 #include "CppUTestExt/MockSupport_c.h"
 
-	void I2C_Write(uint8_t value)
+	void I2C_Write(uint8_t data)
 	{
 		mock_c()->actualCall("I2C_Write")
-			->withIntParameters("value", value);
+			->withIntParameters("data", data);
 	}
 
 	uint8_t I2C_Read()
@@ -35,4 +35,17 @@ TEST(I2CSlaveDriver, ProcessCommandReadsInCommandByte)
 			.andReturnValue((uint8_t)0xFF);
 
 	I2CSlaveDriver_processCommand();
+}
+
+TEST(I2CSlaveDriver, GetVersionCommandReturnsVersion)
+{
+	mock().expectOneCall("I2C_Read")
+			.andReturnValue((uint8_t)0x00);
+
+	I2CSlaveDriver_processCommand();
+
+	mock().expectOneCall("I2C_Write")
+			.withParameter("data", 0);
+
+	I2CSlaveDriver_sendData();
 }
