@@ -2,6 +2,7 @@
 COMPONENT_NAME = BlinkTest
 
 #--- Inputs ----#
+CPPUTEST_USE_EXTENSIONS = Y
 CPPUTEST_HOME = CppUTest
 CPP_PLATFORM = Gcc
 #CXX = clang
