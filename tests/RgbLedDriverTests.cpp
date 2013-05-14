@@ -60,14 +60,24 @@ TEST(RgbLedDriver, LedsOffAfterCreate)
 {
 	RgbLedDriver_Create();
 
-	for (int i = 0; i < 16 * 3; i++) {
+	for (int i = 0; i < 16 * 3; i++)
 		CHECK_EQUAL(0, ws2811Spy_GetLeds()[i]);
-	}
+}
+
+TEST(RgbLedDriver, TurnOnLedOne)
+{
+	RgbLedDriver_TurnOn(1, 0x10, 0x20, 0x30);
+
+	CHECK_EQUAL(0x20, ws2811Spy_GetLeds()[0])
+	CHECK_EQUAL(0x10, ws2811Spy_GetLeds()[1])
+	CHECK_EQUAL(0x30, ws2811Spy_GetLeds()[2])
+	for (int i = 1 * 3; i < 16 * 3; i++)
+		CHECK_EQUAL(0, ws2811Spy_GetLeds()[i]);
 }
 
 /*
  * TODO Test List
- *	- create turns off all leds?
+ *	✔ create turns off all leds?
  *	- turn on/off single LED
  *	- turn on/off multiple LEDs
  *	- get colour of single LED
