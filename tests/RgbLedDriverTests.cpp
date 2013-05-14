@@ -2,14 +2,15 @@ extern "C"
 {
 #include "RgbLedDriver.h"
 #include "ws2811_hs.h"
-	uint8_t *ws2811SpyLeds = 0;
+	uint8_t ws2811SpyLeds[16 * 3] = {0xff};
 	uint16_t ws2811SpyLength = 0;
 	uint8_t ws2811SpyPinMask = 0;
 	int ws2811SpyCallCount = 0;
 
 	void ws2811Spy_Reset(void)
 	{
-		ws2811SpyLeds = 0;
+		for (int i = 0; i < 16 * 3; i++)
+			ws2811SpyLeds[i] = 0xff;
 		ws2811SpyLength = 0;
 		ws2811SpyPinMask = 0;
 		ws2811SpyCallCount = 0;
@@ -17,9 +18,10 @@ extern "C"
 
 	void write_ws2811_hs(uint8_t *data, uint16_t length, uint8_t pinmask)
 	{
-		ws2811SpyLeds = data;
 		ws2811SpyLength = length;
 		ws2811SpyPinMask = pinmask;
+		for (int i = 0; i < length; i++)
+			ws2811SpyLeds[i] = data[i];
 	}
 
 	uint8_t *ws2811Spy_GetLeds(void)
