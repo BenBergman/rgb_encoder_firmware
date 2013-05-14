@@ -1,0 +1,73 @@
+extern "C"
+{
+#include "RgbLedDriver.h"
+#include "ws2811_hs.h"
+	uint8_t *ws2811SpyLeds = 0;
+	uint16_t ws2811SpyLength = 0;
+	uint8_t ws2811SpyPinMask = 0;
+	int ws2811SpyCallCount = 0;
+
+	void ws2811Spy_Reset(void)
+	{
+		ws2811SpyLeds = 0;
+		ws2811SpyLength = 0;
+		ws2811SpyPinMask = 0;
+		ws2811SpyCallCount = 0;
+	}
+
+	void write_ws2811_hs(uint8_t *data, uint16_t length, uint8_t pinmask)
+	{
+		ws2811SpyLeds = data;
+		ws2811SpyLength = length;
+		ws2811SpyPinMask = pinmask;
+	}
+
+	uint8_t *ws2811Spy_GetLeds(void)
+	{
+		return ws2811SpyLeds;
+	}
+
+	uint16_t ws2811Spy_GetLength(void)
+	{
+		return ws2811SpyLength;
+	}
+
+	uint8_t ws2811Spy_GetPinMask(void)
+	{
+		return ws2811SpyPinMask;
+	}
+
+	int ws2811Spy_GetCallCount(void)
+	{
+		return ws2811SpyCallCount;
+	}
+}
+
+#include "CppUTest/TestHarness.h"
+
+
+TEST_GROUP(RgbLedDriver)
+{
+	void setup()
+	{
+		ws2811Spy_Reset();
+	}
+};
+
+TEST(RgbLedDriver, LedsOffAfterCreate)
+{
+	RgbLedDriver_Create();
+
+	for (int i = 0; i < 16 * 3; i++) {
+		CHECK_EQUAL(0, ws2811Spy_GetLeds()[i]);
+	}
+}
+
+/*
+ * TODO Test List
+ *	- create turns off all leds?
+ *	- turn on/off single LED
+ *	- turn on/off multiple LEDs
+ *	- get colour of single LED
+ *	- get colour of all LEDs
+ */
