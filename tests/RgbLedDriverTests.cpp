@@ -53,6 +53,7 @@ TEST_GROUP(RgbLedDriver)
 	void setup()
 	{
 		ws2811Spy_Reset();
+		RgbLedDriver_Create();
 	}
 };
 
@@ -75,11 +76,35 @@ TEST(RgbLedDriver, TurnOnLedOne)
 		CHECK_EQUAL(0, ws2811Spy_GetLeds()[i]);
 }
 
+TEST(RgbLedDriver, TurnOnMultipleLeds)
+{
+	RgbLedDriver_TurnOn(4, 5, 6, 7);
+	RgbLedDriver_TurnOn(8, 9, 10, 11);
+
+	CHECK_EQUAL(6, ws2811Spy_GetLeds()[(4 - 1) * 3 + 0])
+	CHECK_EQUAL(5, ws2811Spy_GetLeds()[(4 - 1) * 3 + 1])
+	CHECK_EQUAL(7, ws2811Spy_GetLeds()[(4 - 1) * 3 + 2])
+
+	CHECK_EQUAL(10, ws2811Spy_GetLeds()[(8 - 1) * 3 + 0])
+	CHECK_EQUAL(9,  ws2811Spy_GetLeds()[(8 - 1) * 3 + 1])
+	CHECK_EQUAL(11, ws2811Spy_GetLeds()[(8 - 1) * 3 + 2])
+
+	for (int i = 1 * 3; i <= 16; i++) {
+		if (i == 4 || i == 8)
+			continue;
+		CHECK_EQUAL(0, ws2811Spy_GetLeds()[(i - 1) * 3 + 0]);
+		CHECK_EQUAL(0, ws2811Spy_GetLeds()[(i - 1) * 3 + 1]);
+		CHECK_EQUAL(0, ws2811Spy_GetLeds()[(i - 1) * 3 + 2]);
+	}
+}
+
 /*
  * TODO Test List
  *	✔ create turns off all leds?
- *	- turn on/off single LED
- *	- turn on/off multiple LEDs
+ *	✔ turn on single LED
+ *	- turn off single LED
+ *	✔ turn on multiple LEDs
+ *	- turn off multiple LEDs
  *	- get colour of single LED
  *	- get colour of all LEDs
  */
