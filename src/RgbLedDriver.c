@@ -22,3 +22,8 @@ void RgbLedDriver_TurnOn(int led, uint8_t r, uint8_t g, uint8_t b)
 
 	write_ws2811_hs((uint8_t *)leds, LENGTH * 3, 0);
 }
+
+uint8_t RgbLedDriver_GetLedColour(int led, int colour)
+{
+	return leds[led - 1][colour];
+}

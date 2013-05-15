@@ -98,6 +98,19 @@ TEST(RgbLedDriver, TurnOnMultipleLeds)
 	}
 }
 
+TEST(RgbLedDriver, CanGetSingleLedColours)
+{
+	CHECK_EQUAL(0, RgbLedDriver_GetLedColour(3, RED));
+	CHECK_EQUAL(0, RgbLedDriver_GetLedColour(3, GREEN));
+	CHECK_EQUAL(0, RgbLedDriver_GetLedColour(3, BLUE));
+
+	RgbLedDriver_TurnOn(3, 4, 5, 6);
+
+	CHECK_EQUAL(4, RgbLedDriver_GetLedColour(3, RED));
+	CHECK_EQUAL(5, RgbLedDriver_GetLedColour(3, GREEN));
+	CHECK_EQUAL(6, RgbLedDriver_GetLedColour(3, BLUE));
+}
+
 /*
  * TODO Test List
  *	✔ create turns off all leds?
@@ -105,6 +118,6 @@ TEST(RgbLedDriver, TurnOnMultipleLeds)
  *	- turn off single LED
  *	✔ turn on multiple LEDs
  *	- turn off multiple LEDs
- *	- get colour of single LED
+ *	✔ get colour of single LED
  *	- get colour of all LEDs
  */
