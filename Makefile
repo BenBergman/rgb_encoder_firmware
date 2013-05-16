@@ -7,10 +7,10 @@ prog: program
 program: codeMsp430
 	make -i -f MakefileMSP430.mk program
 
-codeCppUTest: CppUTest CppUTestExt
+codeCppUTest: CppUTest CppUTestExt version
 	make -i -f MakefileCppUTest.mk 
 
-codeMsp430:
+codeMsp430: version
 	make -i -f MakefileMSP430.mk
 
 cleanCodeCppUTest:
@@ -29,6 +29,9 @@ CppUTestExt: CppUTest/lib/libCppUTestExt.a
 
 CppUTest/lib/libCppUTestExt.a:
 	make -i -C CppUTest extensions
+
+version:
+	./generate_version.sh
 
 
 
