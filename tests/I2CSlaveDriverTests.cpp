@@ -78,6 +78,27 @@ TEST(I2CSlaveDriver, SetSingleLedCommandSetsSingleLed)
 	CHECK_EQUAL(0x30, RgbLedDriver_GetLedColour(1, BLUE));
 }
 
+TEST(I2CSlaveDriver, GetSingleLedColour)
+{
+	RgbLedDriver_TurnOn(4, 0x50, 0x60, 0x70);
+
+	mock().expectOneCall("I2C_Read")
+		.andReturnValue((uint8_t)0x10);
+	mock().expectOneCall("I2C_Read")
+		.andReturnValue((uint8_t)3);
+
+	I2CSlaveDriver_processCommand();
+
+	mock().expectOneCall("I2C_Write")
+		.withParameter("data", 0x50);
+	mock().expectOneCall("I2C_Write")
+		.withParameter("data", 0x60);
+	mock().expectOneCall("I2C_Write")
+		.withParameter("data", 0x70);
+
+	I2CSlaveDriver_sendData();
+}
+
 /*
  * Test List:
  * ==========
@@ -85,8 +106,10 @@ TEST(I2CSlaveDriver, SetSingleLedCommandSetsSingleLed)
  *	✔ get version
  *	- get button/touch status
  *	- get rotation
- *	- get single LED colour
+ *	✔ get single LED colour
  *	- get all LED colours
  *	✔ set single LED colour
  *	- set all LED colours
+ *	- toggle interrupt line
+ *	- toggle touch notification line
  */
