@@ -80,12 +80,12 @@ TEST(I2CSlaveDriver, SetSingleLedCommandSetsSingleLed)
 
 TEST(I2CSlaveDriver, GetSingleLedColour)
 {
-	RgbLedDriver_TurnOn(4, 0x50, 0x60, 0x70);
+	RgbLedDriver_TurnOn(1, 0x50, 0x60, 0x70);
 
 	mock().expectOneCall("I2C_Read")
 		.andReturnValue((uint8_t)0x10);
 	mock().expectOneCall("I2C_Read")
-		.andReturnValue((uint8_t)3);
+		.andReturnValue((uint8_t)1);
 
 	I2CSlaveDriver_processCommand();
 
@@ -99,6 +99,44 @@ TEST(I2CSlaveDriver, GetSingleLedColour)
 	I2CSlaveDriver_sendData();
 }
 
+TEST(I2CSlaveDriver, GetMultipleLedColours)
+{
+	RgbLedDriver_TurnOn(7, 0x50, 0x60, 0x70);
+	RgbLedDriver_TurnOn(8, 0x05, 0x06, 0x07);
+
+	mock().expectOneCall("I2C_Read")
+		.andReturnValue((uint8_t)0x10);
+	mock().expectOneCall("I2C_Read")
+		.andReturnValue((uint8_t)7);
+
+	I2CSlaveDriver_processCommand();
+
+	mock().expectOneCall("I2C_Write")
+		.withParameter("data", 0x50);
+	mock().expectOneCall("I2C_Write")
+		.withParameter("data", 0x60);
+	mock().expectOneCall("I2C_Write")
+		.withParameter("data", 0x70);
+
+	I2CSlaveDriver_sendData();
+
+	mock().expectOneCall("I2C_Read")
+		.andReturnValue((uint8_t)0x10);
+	mock().expectOneCall("I2C_Read")
+		.andReturnValue((uint8_t)8);
+
+	I2CSlaveDriver_processCommand();
+
+	mock().expectOneCall("I2C_Write")
+		.withParameter("data", 0x05);
+	mock().expectOneCall("I2C_Write")
+		.withParameter("data", 0x06);
+	mock().expectOneCall("I2C_Write")
+		.withParameter("data", 0x07);
+
+	I2CSlaveDriver_sendData();
+}
+
 /*
  * Test List:
  * ==========
@@ -107,6 +145,7 @@ TEST(I2CSlaveDriver, GetSingleLedColour)
  *	- get button/touch status
  *	- get rotation
  *	✔ get single LED colour
+ *	✔ get multiple LED colours
  *	- get all LED colours
  *	✔ set single LED colour
  *	- set all LED colours

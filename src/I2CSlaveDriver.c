@@ -35,9 +35,9 @@ void I2CSlaveDriver_sendData(void)
 			I2C_WriteString(RGB_ENCODER_FIRMWARE_VERSION);
 			break;
 		case 0x10:
-			I2C_Write(0x50);
-			I2C_Write(0x60);
-			I2C_Write(0x70);
+			I2C_Write(RgbLedDriver_GetLedColour(led, RED));
+			I2C_Write(RgbLedDriver_GetLedColour(led, GREEN));
+			I2C_Write(RgbLedDriver_GetLedColour(led, BLUE));
 			break;
 		default:
 			/* TODO: Runtime error? */
