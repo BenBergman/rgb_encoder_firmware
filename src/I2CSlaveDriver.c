@@ -1,3 +1,4 @@
+#include "version.h"
 #include "I2CSlaveDriver.h"
 #include "RgbLedDriver.h"
 
@@ -23,5 +24,5 @@ void I2CSlaveDriver_processCommand(void)
 
 void I2CSlaveDriver_sendData(void)
 {
-	I2C_Write(0);
+	I2C_WriteString(RGB_ENCODER_FIRMWARE_VERSION);
 }

@@ -3,6 +3,7 @@
 
 extern "C"
 {
+#include "version.h"
 #include "I2CSlaveDriver.h"
 #include "RgbLedDriver.h"
 #include "CppUTestExt/MockSupport_c.h"
@@ -11,6 +12,12 @@ extern "C"
 	{
 		mock_c()->actualCall("I2C_Write")
 			->withIntParameters("data", data);
+	}
+
+	void I2C_WriteString(char *data)
+	{
+		mock_c()->actualCall("I2C_WriteString")
+			->withStringParameters("data", data);
 	}
 
 	uint8_t I2C_Read()
@@ -45,8 +52,8 @@ TEST(I2CSlaveDriver, GetVersionCommandReturnsVersion)
 
 	I2CSlaveDriver_processCommand();
 
-	mock().expectOneCall("I2C_Write")
-			.withParameter("data", 0);
+	mock().expectOneCall("I2C_WriteString")
+			.withParameter("data", RGB_ENCODER_FIRMWARE_VERSION);
 
 	I2CSlaveDriver_sendData();
 }
@@ -75,7 +82,7 @@ TEST(I2CSlaveDriver, SetSingleLedCommandSetsSingleLed)
  * Test List:
  * ==========
  * Dispatch actions for each command
- *	- get version
+ *	✔ get version
  *	- get button/touch status
  *	- get rotation
  *	- get single LED colour
