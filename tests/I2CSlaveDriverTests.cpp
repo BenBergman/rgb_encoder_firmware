@@ -30,17 +30,17 @@ extern "C"
 
 TEST_GROUP(I2CSlaveDriver)
 {
-    void teardown()
-    {
-        mock().checkExpectations();
-        mock().clear();
-    }
+	void teardown()
+	{
+		mock().checkExpectations();
+		mock().clear();
+	}
 };
 
 TEST(I2CSlaveDriver, ProcessCommandReadsInCommandByte)
 {
 	mock().expectOneCall("I2C_Read")
-			.andReturnValue((uint8_t)0xFF);
+		.andReturnValue((uint8_t)0xFF);
 
 	I2CSlaveDriver_processCommand();
 }
@@ -48,12 +48,12 @@ TEST(I2CSlaveDriver, ProcessCommandReadsInCommandByte)
 TEST(I2CSlaveDriver, GetVersionCommandReturnsVersion)
 {
 	mock().expectOneCall("I2C_Read")
-			.andReturnValue((uint8_t)0x00);
+		.andReturnValue((uint8_t)0x00);
 
 	I2CSlaveDriver_processCommand();
 
 	mock().expectOneCall("I2C_WriteString")
-			.withParameter("data", RGB_ENCODER_FIRMWARE_VERSION);
+		.withParameter("data", RGB_ENCODER_FIRMWARE_VERSION);
 
 	I2CSlaveDriver_sendData();
 }
@@ -61,15 +61,15 @@ TEST(I2CSlaveDriver, GetVersionCommandReturnsVersion)
 TEST(I2CSlaveDriver, SetSingleLedCommandSetsSingleLed)
 {
 	mock().expectOneCall("I2C_Read")
-			.andReturnValue((uint8_t)0x80);
+		.andReturnValue((uint8_t)0x80);
 	mock().expectOneCall("I2C_Read")
-			.andReturnValue((uint8_t)0x01);
+		.andReturnValue((uint8_t)0x01);
 	mock().expectOneCall("I2C_Read")
-			.andReturnValue((uint8_t)0x10);
+		.andReturnValue((uint8_t)0x10);
 	mock().expectOneCall("I2C_Read")
-			.andReturnValue((uint8_t)0x20);
+		.andReturnValue((uint8_t)0x20);
 	mock().expectOneCall("I2C_Read")
-			.andReturnValue((uint8_t)0x30);
+		.andReturnValue((uint8_t)0x30);
 
 	I2CSlaveDriver_processCommand();
 
