@@ -6,7 +6,9 @@
 enum {
 	RED = 1,
 	GREEN = 0,
-	BLUE = 2
+	BLUE = 2,
+
+	COLOURS_TOTAL
 };
 
 void RgbLedDriver_Create(void);
