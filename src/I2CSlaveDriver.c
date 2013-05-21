@@ -12,10 +12,10 @@ void I2CSlaveDriver_processCommand(void)
 	command = I2C_Read();
 
 	switch (command) {
-		case 0x10:
+		case GET_LED_COLOUR:
 			led = I2C_Read();
 			break;
-		case 0x80:
+		case SET_LED_COLOUR:
 			led = I2C_Read();
 			red = I2C_Read();
 			green = I2C_Read();
@@ -31,10 +31,10 @@ void I2CSlaveDriver_processCommand(void)
 void I2CSlaveDriver_sendData(void)
 {
 	switch (command) {
-		case 0x00:
+		case GET_VERSION:
 			I2C_WriteString(RGB_ENCODER_FIRMWARE_VERSION);
 			break;
-		case 0x10:
+		case GET_LED_COLOUR:
 			I2C_Write(RgbLedDriver_GetLedColour(led, RED));
 			I2C_Write(RgbLedDriver_GetLedColour(led, GREEN));
 			I2C_Write(RgbLedDriver_GetLedColour(led, BLUE));
