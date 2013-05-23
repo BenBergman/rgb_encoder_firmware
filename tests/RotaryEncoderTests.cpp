@@ -6,22 +6,23 @@ extern "C"
 	#include "RotaryEncoder.h"
 }
 
+uint8_t encoderAddress = 0x00;
+
 TEST_GROUP(RotaryEncoder)
 {
+	void setup() {
+		encoderAddress = 0x00;
+		RotaryEncoder_Create(&encoderAddress);
+	}
 };
 
 TEST(RotaryEncoder, CreateClearsRotation)
 {
-	uint8_t encoderAddress = 0x00;
-	RotaryEncoder_Create(&encoderAddress);
-
 	CHECK_EQUAL(0, RotaryEncoder_GetRotation());
 }
 
 TEST(RotaryEncoder, SingleNegativeRotationDetected)
 {
-	uint8_t encoderAddress = 0x00;
-	RotaryEncoder_Create(&encoderAddress);
 	encoderAddress = 0x01;
 	RotaryEncoder_Read();
 	encoderAddress = 0x03;
@@ -36,8 +37,6 @@ TEST(RotaryEncoder, SingleNegativeRotationDetected)
 
 TEST(RotaryEncoder, SinglePositiveRotationDetected)
 {
-	uint8_t encoderAddress = 0x00;
-	RotaryEncoder_Create(&encoderAddress);
 	encoderAddress = 0x02;
 	RotaryEncoder_Read();
 	encoderAddress = 0x03;
