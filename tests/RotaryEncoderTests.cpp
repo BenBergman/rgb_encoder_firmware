@@ -8,6 +8,20 @@ extern "C"
 
 uint8_t encoderAddress = 0x00;
 
+static void RotateFullPositiveNotches(int rotations)
+{
+	for (int i = 0; i < rotations; i++) {
+		encoderAddress = 0x02;
+		RotaryEncoder_Read();
+		encoderAddress = 0x03;
+		RotaryEncoder_Read();
+		encoderAddress = 0x01;
+		RotaryEncoder_Read();
+		encoderAddress = 0x00;
+		RotaryEncoder_Read();
+	}
+}
+
 TEST_GROUP(RotaryEncoder)
 {
 	void setup() {
@@ -37,46 +51,14 @@ TEST(RotaryEncoder, SingleNegativeRotationDetected)
 
 TEST(RotaryEncoder, SinglePositiveRotationDetected)
 {
-	encoderAddress = 0x02;
-	RotaryEncoder_Read();
-	encoderAddress = 0x03;
-	RotaryEncoder_Read();
-	encoderAddress = 0x01;
-	RotaryEncoder_Read();
-	encoderAddress = 0x00;
-	RotaryEncoder_Read();
+	RotateFullPositiveNotches(1);
 
 	CHECK_EQUAL(1, RotaryEncoder_GetRotation());
 }
 
 TEST(RotaryEncoder, MultiplePositiveRotationsDetected)
 {
-	encoderAddress = 0x02;
-	RotaryEncoder_Read();
-	encoderAddress = 0x03;
-	RotaryEncoder_Read();
-	encoderAddress = 0x01;
-	RotaryEncoder_Read();
-	encoderAddress = 0x00;
-	RotaryEncoder_Read();
-
-	encoderAddress = 0x02;
-	RotaryEncoder_Read();
-	encoderAddress = 0x03;
-	RotaryEncoder_Read();
-	encoderAddress = 0x01;
-	RotaryEncoder_Read();
-	encoderAddress = 0x00;
-	RotaryEncoder_Read();
-
-	encoderAddress = 0x02;
-	RotaryEncoder_Read();
-	encoderAddress = 0x03;
-	RotaryEncoder_Read();
-	encoderAddress = 0x01;
-	RotaryEncoder_Read();
-	encoderAddress = 0x00;
-	RotaryEncoder_Read();
+	RotateFullPositiveNotches(3);
 
 	CHECK_EQUAL(3, RotaryEncoder_GetRotation());
 }
