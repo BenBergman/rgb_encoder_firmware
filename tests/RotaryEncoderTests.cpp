@@ -99,7 +99,7 @@ TEST(RotaryEncoder, CanClearRotations)
 	CHECK_EQUAL(0, RotaryEncoder_GetRotation());
 }
 
-TEST(RotaryEncoder, CanHandleBadRotations)
+TEST(RotaryEncoder, CanHandleMissedStepMidRotation)
 {
 	encoderAddress = 0x02;
 	RotaryEncoder_Read();
@@ -109,6 +109,20 @@ TEST(RotaryEncoder, CanHandleBadRotations)
 	RotaryEncoder_Read();
 
 	CHECK_EQUAL(1, RotaryEncoder_GetRotation());
+}
+
+TEST(RotaryEncoder, CanHandleMissedStepAtDetent)
+{
+	encoderAddress = 0x02;
+	RotaryEncoder_Read();
+	encoderAddress = 0x03;
+	RotaryEncoder_Read();
+	encoderAddress = 0x01;
+	RotaryEncoder_Read();
+
+	RotateFullPositiveNotches(1);
+
+	CHECK_EQUAL(2, RotaryEncoder_GetRotation());
 }
 
 

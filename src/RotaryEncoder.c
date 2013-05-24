@@ -27,11 +27,18 @@ void RotaryEncoder_Read()
 	directionCounter += enc_states[encoderHistory & 0x0F];
 
 	if (encoderState == 0x00) {
-		if (directionCounter > 0)
+		while (directionCounter > 0) {
+			directionCounter -= 4;
 			rotation++;
-		else if (directionCounter < 0)
+			if (directionCounter < 0)
+				directionCounter = 0;
+		}
+		while (directionCounter < 0) {
+			directionCounter += 4;
 			rotation--;
-		directionCounter = 0;
+			if (directionCounter > 0)
+				directionCounter = 0;
+		}
 	}
 }
 
