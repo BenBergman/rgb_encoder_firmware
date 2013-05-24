@@ -8,16 +8,21 @@ extern "C"
 
 uint8_t encoderAddress = 0x00;
 
+uint8_t positiveStates[] = {0x02, 0x03, 0x01, 0x00};
+uint8_t negativeStates[] = {0x01, 0x03, 0x02, 0x00};
+
 static void RotateFullPositiveNotches(int rotations)
 {
-	for (int i = 0; i < rotations; i++) {
-		encoderAddress = 0x02;
+	for (int i = 0; i < rotations * 4; i++) {
+		encoderAddress = positiveStates[i%4];
 		RotaryEncoder_Read();
-		encoderAddress = 0x03;
-		RotaryEncoder_Read();
-		encoderAddress = 0x01;
-		RotaryEncoder_Read();
-		encoderAddress = 0x00;
+	}
+}
+
+static void RotateFullNegativeNotches(int rotations)
+{
+	for (int i = 0; i < rotations * 4; i++) {
+		encoderAddress = negativeStates[i%4];
 		RotaryEncoder_Read();
 	}
 }
@@ -37,14 +42,7 @@ TEST(RotaryEncoder, CreateClearsRotation)
 
 TEST(RotaryEncoder, SingleNegativeRotationDetected)
 {
-	encoderAddress = 0x01;
-	RotaryEncoder_Read();
-	encoderAddress = 0x03;
-	RotaryEncoder_Read();
-	encoderAddress = 0x02;
-	RotaryEncoder_Read();
-	encoderAddress = 0x00;
-	RotaryEncoder_Read();
+	RotateFullNegativeNotches(1);
 
 	CHECK_EQUAL(-1, RotaryEncoder_GetRotation());
 }
@@ -63,15 +61,22 @@ TEST(RotaryEncoder, MultiplePositiveRotationsDetected)
 	CHECK_EQUAL(3, RotaryEncoder_GetRotation());
 }
 
+TEST(RotaryEncoder, MultipleNegativeRotationsDetected)
+{
+	RotateFullNegativeNotches(4);
+
+	CHECK_EQUAL(-4, RotaryEncoder_GetRotation());
+}
+
 
 /*
  * Test List:
  * ==========
  *	✔ rotary encoder initialization clears rotation
- *	- encoder change is reflected correctly
+ *	✔ encoder change is reflected correctly
  *		✔ can detect single notch rotation
- *		- can detect several notch rotation
- *		- forward and backward
+ *		✔ can detect several notch rotation
+ *		✔ forward and backward
  *	- bad rotations (ie jumps) are dealt with correctly
  *	- rotations are cumulative
  *		- forward + forward
