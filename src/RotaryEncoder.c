@@ -3,6 +3,7 @@
 static int8_t enc_states[] = {0,-1,1,0,1,0,0,-1,-1,0,0,1,0,1,-1,0};
 
 static int rotation;
+static int directionCounter;
 static uint8_t *encoderAddress;
 static uint8_t encoderHistory = 0;
 
@@ -15,14 +16,23 @@ void RotaryEncoder_Create(uint8_t *encoder)
 
 int RotaryEncoder_GetRotation()
 {
-	return rotation/4;
+	return rotation;
 }
 
 void RotaryEncoder_Read()
 {
+	uint8_t encoderState = (*encoderAddress & 0x03);
 	encoderHistory = (uint8_t) (encoderHistory << 2);
-	encoderHistory = (uint8_t) (encoderHistory | (*encoderAddress & 0x03));
-	rotation += enc_states[encoderHistory & 0x0F];
+	encoderHistory = (uint8_t) (encoderHistory | encoderState);
+	directionCounter += enc_states[encoderHistory & 0x0F];
+
+	if (encoderState == 0x00) {
+		if (directionCounter > 0)
+			rotation++;
+		else if (directionCounter < 0)
+			rotation--;
+		directionCounter = 0;
+	}
 }
 
 void RotaryEncoder_ResetRotation()

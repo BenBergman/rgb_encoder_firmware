@@ -99,6 +99,18 @@ TEST(RotaryEncoder, CanClearRotations)
 	CHECK_EQUAL(0, RotaryEncoder_GetRotation());
 }
 
+TEST(RotaryEncoder, CanHandleBadRotations)
+{
+	encoderAddress = 0x02;
+	RotaryEncoder_Read();
+	encoderAddress = 0x01;
+	RotaryEncoder_Read();
+	encoderAddress = 0x00;
+	RotaryEncoder_Read();
+
+	CHECK_EQUAL(1, RotaryEncoder_GetRotation());
+}
+
 
 /*
  * Test List:
