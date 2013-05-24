@@ -86,6 +86,19 @@ TEST(RotaryEncoder, CombinationForwardAndBackRotationsCancel)
 	CHECK_EQUAL(4, RotaryEncoder_GetRotation());
 }
 
+TEST(RotaryEncoder, CanClearRotations)
+{
+	RotateFullPositiveNotches(3);
+	RotaryEncoder_ResetRotation();
+
+	CHECK_EQUAL(0, RotaryEncoder_GetRotation());
+
+	RotateFullNegativeNotches(7);
+	RotaryEncoder_ResetRotation();
+
+	CHECK_EQUAL(0, RotaryEncoder_GetRotation());
+}
+
 
 /*
  * Test List:

@@ -24,3 +24,8 @@ void RotaryEncoder_Read()
 	encoderHistory = (uint8_t) (encoderHistory | (*encoderAddress & 0x03));
 	rotation += enc_states[encoderHistory & 0x0F];
 }
+
+void RotaryEncoder_ResetRotation()
+{
+	rotation = 0;
+}
