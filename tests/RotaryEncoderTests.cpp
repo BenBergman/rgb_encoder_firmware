@@ -99,6 +99,20 @@ TEST(RotaryEncoder, CanClearRotations)
 	CHECK_EQUAL(0, RotaryEncoder_GetRotation());
 }
 
+TEST(RotaryEncoder, StartsPositiveRotationButReturnsBeforeDetent)
+{
+	encoderAddress = 0x02;
+	RotaryEncoder_Read();
+	encoderAddress = 0x03;
+	RotaryEncoder_Read();
+	encoderAddress = 0x02;
+	RotaryEncoder_Read();
+	encoderAddress = 0x00;
+	RotaryEncoder_Read();
+
+	CHECK_EQUAL(0, RotaryEncoder_GetRotation());
+}
+
 TEST(RotaryEncoder, CanHandleMissedStepMidRotation)
 {
 	encoderAddress = 0x02;
@@ -134,7 +148,7 @@ TEST(RotaryEncoder, CanHandleMissedStepAtDetent)
  *		✔ can detect single notch rotation
  *		✔ can detect several notch rotation
  *		✔ forward and backward
- *	- bad rotations (ie jumps) are dealt with correctly
+ *	✔ bad rotations (ie jumps) are dealt with correctly
  *	✔ rotations are cumulative
  *		- forward + forward
  *		- forward + backwards
