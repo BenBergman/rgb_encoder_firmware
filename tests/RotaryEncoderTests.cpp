@@ -68,6 +68,24 @@ TEST(RotaryEncoder, MultipleNegativeRotationsDetected)
 	CHECK_EQUAL(-4, RotaryEncoder_GetRotation());
 }
 
+TEST(RotaryEncoder, CombinationForwardAndBackRotationsCancel)
+{
+	RotateFullPositiveNotches(10);
+	RotateFullNegativeNotches(5);
+
+	CHECK_EQUAL(5, RotaryEncoder_GetRotation());
+
+	RotateFullPositiveNotches(1);
+	RotateFullNegativeNotches(8);
+
+	CHECK_EQUAL(-2, RotaryEncoder_GetRotation());
+
+	RotateFullNegativeNotches(4);
+	RotateFullPositiveNotches(10);
+
+	CHECK_EQUAL(4, RotaryEncoder_GetRotation());
+}
+
 
 /*
  * Test List:
@@ -78,7 +96,7 @@ TEST(RotaryEncoder, MultipleNegativeRotationsDetected)
  *		✔ can detect several notch rotation
  *		✔ forward and backward
  *	- bad rotations (ie jumps) are dealt with correctly
- *	- rotations are cumulative
+ *	✔ rotations are cumulative
  *		- forward + forward
  *		- forward + backwards
  *		- backward + forward
