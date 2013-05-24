@@ -114,5 +114,5 @@ TEST(RotaryEncoder, CanClearRotations)
  *		- forward + backwards
  *		- backward + forward
  *		- backward + backward
- *	- can clear rotation amount
+ *	✔ can clear rotation amount
  */

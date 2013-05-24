@@ -10,7 +10,7 @@ void RotaryEncoder_Create(uint8_t *encoder)
 {
 	encoderAddress = encoder;
 	encoderHistory = 0;
-	rotation = 0;
+	RotaryEncoder_ResetRotation();
 }
 
 int RotaryEncoder_GetRotation()
