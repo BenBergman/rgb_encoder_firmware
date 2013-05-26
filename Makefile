@@ -33,6 +33,9 @@ CppUTest/lib/libCppUTestExt.a:
 version:
 	./generate_version.sh
 
+.PHONY:
+	version
+
 
 
 ##		# this is set up to by default to make the top level and test with CppUTest

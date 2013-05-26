@@ -1,5 +1,7 @@
 #include "RgbLedDriver.h"
-#include "ws2811_hs.h"
+
+/* This function is defined in the associated .S assembly source file */
+void write_ws2811_hs(uint8_t *data, uint16_t length, uint8_t pinmask);
 
 #define LENGTH (uint16_t)16
 

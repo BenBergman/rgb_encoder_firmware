@@ -12,9 +12,10 @@ TARGET     = blink
 MCU        = msp430g2553
 # List all the source files here
 # eg if you have a source file foo.c then list it here
-SOURCES = main.c
+SOURCES = main.c src/RgbLedDriver.c
+ASM_SRC = src/ws2811_hs.S
 # Include are located in the Include directory
-INCLUDES = -IInclude
+INCLUDES = -Iinclude
 # Add or subtract whatever MSPGCC flags you want. There are plenty more
 #######################################################################################
 CFLAGS   = -mmcu=$(MCU) -g -Os -Wall -Wunused $(INCLUDES)   
@@ -41,10 +42,11 @@ MV       = mv
 DEPEND = $(SOURCES:.c=.d)
 # all the object files
 OBJECTS = $(SOURCES:.c=.o)
+ASM_OBJ = $(ASM_SRC:.S=.o)
 all: $(TARGET).elf $(TARGET).hex $(TARGET).txt 
-$(TARGET).elf: $(OBJECTS)
+$(TARGET).elf: $(OBJECTS) $(ASM_OBJ)
 	echo "Linking $@"
-	$(CC) $(OBJECTS) $(LDFLAGS) $(LIBS) -o $@
+	$(CC) $(OBJECTS) $(ASM_OBJ) $(LDFLAGS) $(LIBS) -o $@
 	echo
 	echo ">>>> Size of Firmware <<<<"
 	$(SIZE) $(TARGET).elf
@@ -58,6 +60,9 @@ $(TARGET).elf: $(OBJECTS)
 %.o: %.c
 	echo "Compiling $<"
 	$(CC) -c $(CFLAGS) -o $@ $<
+%.o: %.S
+	echo "Compiling $<"
+	$(CC) -D_GNU_ASSEMBLER_ -c $(ASFLAGS) $(INCLUDES) -o $@ $<
 # rule for making assembler source listing, to see the code
 %.lst: %.c
 	$(CC) -c $(ASFLAGS) -Wa,-anlhd $< > $@
@@ -75,6 +80,7 @@ endif
 .PHONY:	clean
 clean:
 	-$(RM) $(OBJECTS)
+	-$(RM) $(ASM_OBJ)
 	-$(RM) $(TARGET).*
 	-$(RM) $(SOURCES:.c=.lst)
 	-$(RM) $(DEPEND)

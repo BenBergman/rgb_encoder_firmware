@@ -1,5 +1,6 @@
 //#include <msp430g2553.h>   /* Genericizable */
 #include <msp430.h>
+#include "RgbLedDriver.h"
 
 #define pin6mask  (0x01 << 6)
 
@@ -15,6 +16,8 @@ int main(void) {
      * Values can be binary or'd together. Other pins are low.
      */
     P1OUT = pin6mask;
+
+	RgbLedDriver_Create();
 
     /* infinite loop */
     for( ; ; ) {
