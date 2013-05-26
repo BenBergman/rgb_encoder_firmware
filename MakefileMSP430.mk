@@ -17,11 +17,11 @@ ASM_SRC = src/ws2811_hs.S
 # Include are located in the Include directory
 INCLUDES = -Iinclude
 # Add or subtract whatever MSPGCC flags you want. There are plenty more
-#######################################################################################
+###############################################################################
 CFLAGS   = -mmcu=$(MCU) -g -Os -Wall -Wunused $(INCLUDES)   
 ASFLAGS  = -mmcu=$(MCU) -x assembler-with-cpp -Wa,-gstabs
 LDFLAGS  = -mmcu=$(MCU) -Wl,-Map=$(TARGET).map
-########################################################################################
+###############################################################################
 CC       = msp430-gcc
 LD       = msp430-ld
 AR       = msp430-ar
@@ -37,7 +37,7 @@ MAKETXT  = srec_cat
 CP       = cp -p
 RM       = rm -f
 MV       = mv
-########################################################################################
+###############################################################################
 # the file which will include dependencies
 DEPEND = $(SOURCES:.c=.d)
 # all the object files
