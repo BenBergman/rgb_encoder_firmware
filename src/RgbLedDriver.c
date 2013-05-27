@@ -13,7 +13,7 @@ void RgbLedDriver_Create(void)
 	for (i = 0; i < LENGTH; i++)
 		for (j = 0; j < COLOURS_TOTAL; j++)
 			leds[i][j] = 0;
-	write_ws2811_hs((uint8_t *)leds, LENGTH * COLOURS_TOTAL, 0);
+	write_ws2811_hs((uint8_t *)leds, LENGTH * COLOURS_TOTAL, 1);
 }
 
 void RgbLedDriver_TurnOn(int led, uint8_t r, uint8_t g, uint8_t b)
@@ -22,7 +22,7 @@ void RgbLedDriver_TurnOn(int led, uint8_t r, uint8_t g, uint8_t b)
 	leds[led - 1][GREEN] = g;
 	leds[led - 1][BLUE] = b;
 
-	write_ws2811_hs((uint8_t *)leds, LENGTH * COLOURS_TOTAL, 0);
+	write_ws2811_hs((uint8_t *)leds, LENGTH * COLOURS_TOTAL, 1);
 }
 
 uint8_t RgbLedDriver_GetLedColour(int led, int colour)

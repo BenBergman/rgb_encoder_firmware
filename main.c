@@ -7,29 +7,37 @@
 int main(void) {
     /* Hold the watchdog timer so it doesn't reset our chip */
     WDTCTL = WDTPW + WDTHOLD;
+	if (CALBC1_16MHZ ==0xFF || CALDCO_16MHZ == 0xFF)
+	{
+		/* If calibration constants erased
+		 * do not load, trap CPU!!
+		 */
+		while(1);
+	}
+	BCSCTL1 = CALBC1_16MHZ;  // Set DCO to 16MHz
+	DCOCTL = CALDCO_16MHZ;
 
-    /* Configure all pins on port 1 as output pins */
-    P1DIR = 0xff;
-
-    /* Set pin 6 high.  Basically, this command sets any combination
-     * of the pins on port 1 high.  Pin 0 is 2^0, pin 1 is 2^2, etc.
-     * Values can be binary or'd together. Other pins are low.
-     */
-    P1OUT = pin6mask;
+    P1DIR = 0x03;
 
 	RgbLedDriver_Create();
 
     /* infinite loop */
     for( ; ; ) {
-        /* The following two lines implement a very crude delay loop.
-         * The actual length of the delay can vary significantly.
-         * This approach may not work with all compilers.
-         */
-        volatile int i;
-        for( i = 0; i < 30000; i++ );
-
-        /* Toggle the state of pin 6 on port 1 by exclusive or'ing with
-           the mask that represents that pin. */
-        P1OUT = P1OUT ^ pin6mask;
+		RgbLedDriver_TurnOn(1 , 5, 1, 1);
+		RgbLedDriver_TurnOn(2 , 1, 5, 1);
+		RgbLedDriver_TurnOn(3 , 1, 1, 5);
+		RgbLedDriver_TurnOn(4 , 5, 5, 5);
+		RgbLedDriver_TurnOn(5 , 5, 1, 1);
+		RgbLedDriver_TurnOn(6 , 1, 5, 1);
+		RgbLedDriver_TurnOn(7 , 1, 1, 5);
+		RgbLedDriver_TurnOn(8 , 5, 5, 5);
+		RgbLedDriver_TurnOn(9 , 5, 1, 1);
+		RgbLedDriver_TurnOn(10, 1, 5, 1);
+		RgbLedDriver_TurnOn(11, 1, 1, 5);
+		RgbLedDriver_TurnOn(12, 5, 5, 5);
+		RgbLedDriver_TurnOn(13, 5, 1, 1);
+		RgbLedDriver_TurnOn(14, 1, 5, 1);
+		RgbLedDriver_TurnOn(15, 1, 1, 5);
+		RgbLedDriver_TurnOn(16, 5, 5, 5);
     }
 }
