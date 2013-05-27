@@ -7,6 +7,7 @@
 int main(void) {
     /* Hold the watchdog timer so it doesn't reset our chip */
     WDTCTL = WDTPW + WDTHOLD;
+	_BIS_SR(OSCOFF);                          // XTAL not used
 	if (CALBC1_16MHZ ==0xFF || CALDCO_16MHZ == 0xFF)
 	{
 		/* If calibration constants erased
@@ -18,6 +19,8 @@ int main(void) {
 	DCOCTL = CALDCO_16MHZ;
 
     P1DIR = 0x03;
+	P2DIR &= ~(0b11000000);
+	P2REN |= 0b11000000;
 
 	RgbLedDriver_Create();
 
