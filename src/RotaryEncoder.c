@@ -35,6 +35,17 @@ static uint8_t RotaryEncoder_ReadEncoderRegister(void)
 	return (uint8_t)((encAVal >> encA) | (encBVal >> (encB - 1)));
 }
 
+static void RotaryEncoder_AddRotations(void)
+{
+	int direction = (directionCounter < 0) ? -1 : 1;
+	while (directionCounter * direction > 0) {
+		directionCounter -= 4 * direction;
+		rotation += direction;
+		if (directionCounter * direction < 0)
+			directionCounter = 0;
+	}
+}
+
 void RotaryEncoder_Read()
 {
 	uint8_t encoderState = RotaryEncoder_ReadEncoderRegister();
@@ -43,18 +54,7 @@ void RotaryEncoder_Read()
 	directionCounter += enc_states[encoderHistory & 0x0F];
 
 	if (encoderState == 0x00) {
-		while (directionCounter > 0) {
-			directionCounter -= 4;
-			rotation++;
-			if (directionCounter < 0)
-				directionCounter = 0;
-		}
-		while (directionCounter < 0) {
-			directionCounter += 4;
-			rotation--;
-			if (directionCounter > 0)
-				directionCounter = 0;
-		}
+		RotaryEncoder_AddRotations();
 	}
 }
 
