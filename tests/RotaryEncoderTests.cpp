@@ -31,7 +31,7 @@ TEST_GROUP(RotaryEncoder)
 {
 	void setup() {
 		encoderAddress = 0x00;
-		RotaryEncoder_Create(&encoderAddress);
+		RotaryEncoder_Create(&encoderAddress, 0, 1);
 	}
 };
 
@@ -137,6 +137,19 @@ TEST(RotaryEncoder, CanHandleMissedStepAtDetent)
 	RotateFullPositiveNotches(1);
 
 	CHECK_EQUAL(2, RotaryEncoder_GetRotation());
+}
+
+TEST(RotaryEncoder, CanUseArbitraryBitMask)
+{
+	RotaryEncoder_Create(&encoderAddress, 6, 7);
+
+	for (int i = 0; i < 4; i++) {
+		encoderAddress = positiveStates[i%4];
+		encoderAddress = (uint8_t)(encoderAddress << 6);
+		RotaryEncoder_Read();
+	}
+
+	CHECK_EQUAL(1, RotaryEncoder_GetRotation());
 }
 
 

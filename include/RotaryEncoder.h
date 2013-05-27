@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-void RotaryEncoder_Create(uint8_t *encoder);
+void RotaryEncoder_Create(uint8_t *encoder, uint8_t encABit, uint8_t encBBit);
 int RotaryEncoder_GetRotation(void);
 void RotaryEncoder_Read(void);
 void RotaryEncoder_ResetRotation(void);
