@@ -12,7 +12,7 @@ TARGET     = blink
 MCU        = msp430g2553
 # List all the source files here
 # eg if you have a source file foo.c then list it here
-SOURCES = main.c src/RgbLedDriver.c
+SOURCES = main.c src/RgbLedDriver.c src/RotaryEncoder.c
 ASM_SRC = src/ws2811_hs.S
 # Include are located in the Include directory
 INCLUDES = -Iinclude
