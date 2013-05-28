@@ -6,10 +6,10 @@ extern "C"
 	#include "RotaryEncoder.h"
 }
 
-uint8_t encoderAddress = 0x00;
+uint8_t encoderAddress = 0x03;
 
-uint8_t positiveStates[] = {0x02, 0x03, 0x01, 0x00};
-uint8_t negativeStates[] = {0x01, 0x03, 0x02, 0x00};
+uint8_t positiveStates[] = {0x02, 0x00, 0x01, 0x03};
+uint8_t negativeStates[] = {0x01, 0x00, 0x02, 0x03};
 
 static void RotateFullPositiveNotches(int rotations)
 {
@@ -30,7 +30,7 @@ static void RotateFullNegativeNotches(int rotations)
 TEST_GROUP(RotaryEncoder)
 {
 	void setup() {
-		encoderAddress = 0x00;
+		encoderAddress = 0x03;
 		RotaryEncoder_Create(&encoderAddress, 0, 1);
 	}
 };
@@ -103,11 +103,11 @@ TEST(RotaryEncoder, StartsPositiveRotationButReturnsBeforeDetent)
 {
 	encoderAddress = 0x02;
 	RotaryEncoder_Read();
-	encoderAddress = 0x03;
+	encoderAddress = 0x00;
 	RotaryEncoder_Read();
 	encoderAddress = 0x02;
 	RotaryEncoder_Read();
-	encoderAddress = 0x00;
+	encoderAddress = 0x03;
 	RotaryEncoder_Read();
 
 	CHECK_EQUAL(0, RotaryEncoder_GetRotation());
@@ -119,7 +119,7 @@ TEST(RotaryEncoder, CanHandleMissedStepMidRotation)
 	RotaryEncoder_Read();
 	encoderAddress = 0x01;
 	RotaryEncoder_Read();
-	encoderAddress = 0x00;
+	encoderAddress = 0x03;
 	RotaryEncoder_Read();
 
 	CHECK_EQUAL(1, RotaryEncoder_GetRotation());
@@ -129,7 +129,7 @@ TEST(RotaryEncoder, CanHandleMissedStepAtDetent)
 {
 	encoderAddress = 0x02;
 	RotaryEncoder_Read();
-	encoderAddress = 0x03;
+	encoderAddress = 0x00;
 	RotaryEncoder_Read();
 	encoderAddress = 0x01;
 	RotaryEncoder_Read();
@@ -168,4 +168,5 @@ TEST(RotaryEncoder, CanUseArbitraryBitMask)
  *		- backward + forward
  *		- backward + backward
  *	✔ can clear rotation amount
+ *	- bug: create is setting LED1 to full green
  */

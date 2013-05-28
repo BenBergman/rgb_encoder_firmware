@@ -1,6 +1,6 @@
 #include "RotaryEncoder.h"
 
-static int8_t enc_states[] = {0,-1,1,0,1,0,0,-1,-1,0,0,1,0,1,-1,0};
+static int8_t enc_states[] = {0,1,-1,0,-1,0,0,1,1,0,0,-1,0,-1,1,0};
 
 static int rotation;
 static int directionCounter;
@@ -11,7 +11,7 @@ static uint8_t encoderHistory = 0;
 void RotaryEncoder_Create(uint8_t *encoder, uint8_t encABit, uint8_t encBBit)
 {
 	encoderAddress = encoder;
-	encoderHistory = 0;
+	encoderHistory = 0x03;
 	RotaryEncoder_ResetRotation();
 	encA = encABit;
 	encB = encBBit;
@@ -58,7 +58,7 @@ void RotaryEncoder_Read()
 	RotaryEncoder_AddStateToHistory(encoderState);
 	directionCounter += enc_states[encoderHistory & 0x0F];
 
-	if (encoderState == 0x00) {
+	if (encoderState == 0x03) {
 		RotaryEncoder_AddRotations();
 	}
 }
@@ -67,3 +67,23 @@ void RotaryEncoder_ResetRotation()
 {
 	rotation = 0;
 }
+
+/*
+ * CW
+ *  A | B
+ * ---+---
+ *  1 | 1
+ *  1 | 0
+ *  0 | 0
+ *  0 | 1
+ *  1 | 1
+ *
+ * CCW
+ *  A | B
+ * ---+---
+ *  1 | 1
+ *  0 | 1
+ *  0 | 0
+ *  1 | 0
+ *  1 | 1
+ */
