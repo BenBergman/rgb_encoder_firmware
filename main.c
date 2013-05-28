@@ -21,6 +21,8 @@ int main(void) {
 
 	P1DIR = 0x01;
 	P2DIR &= ~(0b11000000);
+	P2SEL &= ~(0b11000000);
+	P2SEL2 &= ~(BIT7|BIT6);
 	P2REN |= 0b11000000;
 
 	RgbLedDriver_Create();
@@ -29,26 +31,23 @@ int main(void) {
 	int i = 0;
 	/* infinite loop */
 	for( ; ; ) {
-		/*
-		RgbLedDriver_TurnOn((i + 1 ) % 16 + 1, 5, 1, 1);
-		RgbLedDriver_TurnOn((i + 2 ) % 16 + 1, 1, 5, 1);
-		RgbLedDriver_TurnOn((i + 3 ) % 16 + 1, 1, 1, 5);
-		RgbLedDriver_TurnOn((i + 4 ) % 16 + 1, 5, 5, 5);
-		RgbLedDriver_TurnOn((i + 5 ) % 16 + 1, 5, 1, 1);
-		RgbLedDriver_TurnOn((i + 6 ) % 16 + 1, 1, 5, 1);
-		RgbLedDriver_TurnOn((i + 7 ) % 16 + 1, 1, 1, 5);
-		RgbLedDriver_TurnOn((i + 8 ) % 16 + 1, 5, 5, 5);
-		RgbLedDriver_TurnOn((i + 9 ) % 16 + 1, 5, 1, 1);
-		RgbLedDriver_TurnOn((i + 10) % 16 + 1, 1, 5, 1);
-		RgbLedDriver_TurnOn((i + 11) % 16 + 1, 1, 1, 5);
-		RgbLedDriver_TurnOn((i + 12) % 16 + 1, 5, 5, 5);
-		RgbLedDriver_TurnOn((i + 13) % 16 + 1, 5, 1, 1);
-		RgbLedDriver_TurnOn((i + 14) % 16 + 1, 1, 5, 1);
-		RgbLedDriver_TurnOn((i + 15) % 16 + 1, 1, 1, 5);
-		RgbLedDriver_TurnOn((i + 16) % 16 + 1, 5, 5, 5);
-		/**/
+		RgbLedDriver_TurnOn((1  - i + 16) % 16 + 1, 5, 1, 1);
+		RgbLedDriver_TurnOn((2  - i + 16) % 16 + 1, 1, 5, 1);
+		RgbLedDriver_TurnOn((3  - i + 16) % 16 + 1, 1, 1, 5);
+		RgbLedDriver_TurnOn((4  - i + 16) % 16 + 1, 5, 5, 5);
+		RgbLedDriver_TurnOn((5  - i + 16) % 16 + 1, 5, 1, 1);
+		RgbLedDriver_TurnOn((6  - i + 16) % 16 + 1, 1, 5, 1);
+		RgbLedDriver_TurnOn((7  - i + 16) % 16 + 1, 1, 1, 5);
+		RgbLedDriver_TurnOn((8  - i + 16) % 16 + 1, 5, 5, 5);
+		RgbLedDriver_TurnOn((9  - i + 16) % 16 + 1, 5, 1, 1);
+		RgbLedDriver_TurnOn((10 - i + 16) % 16 + 1, 1, 5, 1);
+		RgbLedDriver_TurnOn((11 - i + 16) % 16 + 1, 1, 1, 5);
+		RgbLedDriver_TurnOn((12 - i + 16) % 16 + 1, 5, 5, 5);
+		RgbLedDriver_TurnOn((13 - i + 16) % 16 + 1, 5, 1, 1);
+		RgbLedDriver_TurnOn((14 - i + 16) % 16 + 1, 1, 5, 1);
+		RgbLedDriver_TurnOn((15 - i + 16) % 16 + 1, 1, 1, 5);
+		RgbLedDriver_TurnOn((16 - i + 16) % 16 + 1, 5, 5, 5);
 		RotaryEncoder_Read();
 		i = RotaryEncoder_GetRotation();
-		RgbLedDriver_TurnOn(1, i + 5, 5, 5);
 	}
 }
