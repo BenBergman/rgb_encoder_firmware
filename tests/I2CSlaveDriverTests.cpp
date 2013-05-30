@@ -156,59 +156,36 @@ static void RotateFullPositiveNotches(int rotations)
 	}
 }
 
-TEST(I2CSlaveDriver, GetSingleRotation)
+static void I2CGetRotation(int expectedValue)
 {
-	RotateFullPositiveNotches(1);
-
 	mock().expectOneCall("I2C_Read")
 		.andReturnValue((uint8_t)0x20);
 
 	I2CSlaveDriver_processCommand();
 
 	mock().expectOneCall("I2C_Write")
-		.withParameter("data", 1);
+		.withParameter("data", expectedValue);
 
 	I2CSlaveDriver_sendData();
+}
+
+TEST(I2CSlaveDriver, GetSingleRotation)
+{
+	RotateFullPositiveNotches(1);
+	I2CGetRotation(1);
 }
 
 TEST(I2CSlaveDriver, GetMultipleRotations)
 {
 	RotateFullPositiveNotches(3);
-
-	mock().expectOneCall("I2C_Read")
-		.andReturnValue((uint8_t)0x20);
-
-	I2CSlaveDriver_processCommand();
-
-	mock().expectOneCall("I2C_Write")
-		.withParameter("data", 3);
-
-	I2CSlaveDriver_sendData();
+	I2CGetRotation(3);
 }
 
 TEST(I2CSlaveDriver, ReadingRotationsResetsRotationCounter)
 {
 	RotateFullPositiveNotches(3);
-
-	mock().expectOneCall("I2C_Read")
-		.andReturnValue((uint8_t)0x20);
-
-	I2CSlaveDriver_processCommand();
-
-	mock().expectOneCall("I2C_Write")
-		.withParameter("data", 3);
-
-	I2CSlaveDriver_sendData();
-
-	mock().expectOneCall("I2C_Read")
-		.andReturnValue((uint8_t)0x20);
-
-	I2CSlaveDriver_processCommand();
-
-	mock().expectOneCall("I2C_Write")
-		.withParameter("data", 0);
-
-	I2CSlaveDriver_sendData();
+	I2CGetRotation(3);
+	I2CGetRotation(0);
 }
 
 /*
