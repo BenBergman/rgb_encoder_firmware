@@ -41,7 +41,7 @@ void I2CSlaveDriver_sendData(void)
 			I2C_Write(RgbLedDriver_GetLedColour(led, BLUE));
 			break;
 		case GET_ROTATION:
-			I2C_Write((uint8_t)1);
+			I2C_Write((uint8_t)RotaryEncoder_GetRotation());
 			RotaryEncoder_ResetRotation();
 			break;
 		default:

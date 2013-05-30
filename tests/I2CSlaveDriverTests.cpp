@@ -153,7 +153,7 @@ static void RotateFullPositiveNotches(int rotations)
 TEST(I2CSlaveDriver, GetSingleRotation)
 {
 	encoderAddress = 0x03;
-	RotaryEncoder_Create(&encoderAddress, 1, 0);
+	RotaryEncoder_Create(&encoderAddress, 0, 1);
 	RotateFullPositiveNotches(1);
 
 	mock().expectOneCall("I2C_Read")
@@ -163,6 +163,23 @@ TEST(I2CSlaveDriver, GetSingleRotation)
 
 	mock().expectOneCall("I2C_Write")
 		.withParameter("data", 1);
+
+	I2CSlaveDriver_sendData();
+}
+
+TEST(I2CSlaveDriver, GetMultipleRotations)
+{
+	encoderAddress = 0x03;
+	RotaryEncoder_Create(&encoderAddress, 0, 1);
+	RotateFullPositiveNotches(3);
+
+	mock().expectOneCall("I2C_Read")
+		.andReturnValue((uint8_t)0x20);
+
+	I2CSlaveDriver_processCommand();
+
+	mock().expectOneCall("I2C_Write")
+		.withParameter("data", 3);
 
 	I2CSlaveDriver_sendData();
 }
