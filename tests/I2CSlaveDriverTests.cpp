@@ -190,6 +190,12 @@ TEST(I2CSlaveDriver, GetSingleNegativeRotation)
 	I2CGetRotation((uint8_t)(-1));
 }
 
+TEST(I2CSlaveDriver, GetManyNegativeRotations)
+{
+	RotateFullNegativeNotches(0x7F);
+	I2CGetRotation((uint8_t)(-0x7F));
+}
+
 TEST(I2CSlaveDriver, GetMultipleRotations)
 {
 	RotateFullPositiveNotches(3);
