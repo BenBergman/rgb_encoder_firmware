@@ -6,6 +6,7 @@ extern "C"
 #include "version.h"
 #include "I2CSlaveDriver.h"
 #include "RgbLedDriver.h"
+#include "RotaryEncoder.h"
 #include "CppUTestExt/MockSupport_c.h"
 
 	void I2C_Write(uint8_t data)
@@ -133,6 +134,35 @@ TEST(I2CSlaveDriver, GetMultipleLedColours)
 		.withParameter("data", 0x06);
 	mock().expectOneCall("I2C_Write")
 		.withParameter("data", 0x07);
+
+	I2CSlaveDriver_sendData();
+}
+
+static uint8_t positiveStates[] = {0x02, 0x00, 0x01, 0x03};
+
+static uint8_t encoderAddress;
+
+static void RotateFullPositiveNotches(int rotations)
+{
+	for (int i = 0; i < rotations * 4; i++) {
+		encoderAddress = positiveStates[i%4];
+		RotaryEncoder_Read();
+	}
+}
+
+TEST(I2CSlaveDriver, GetSingleRotation)
+{
+	encoderAddress = 0x03;
+	RotaryEncoder_Create(&encoderAddress, 1, 0);
+	RotateFullPositiveNotches(1);
+
+	mock().expectOneCall("I2C_Read")
+		.andReturnValue((uint8_t)0x20);
+
+	I2CSlaveDriver_processCommand();
+
+	mock().expectOneCall("I2C_Write")
+		.withParameter("data", 1);
 
 	I2CSlaveDriver_sendData();
 }

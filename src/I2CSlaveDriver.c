@@ -1,6 +1,7 @@
 #include "version.h"
 #include "I2CSlaveDriver.h"
 #include "RgbLedDriver.h"
+#include "RotaryEncoder.h"
 
 uint8_t command = 0;
 uint8_t led = 0;
@@ -38,6 +39,10 @@ void I2CSlaveDriver_sendData(void)
 			I2C_Write(RgbLedDriver_GetLedColour(led, RED));
 			I2C_Write(RgbLedDriver_GetLedColour(led, GREEN));
 			I2C_Write(RgbLedDriver_GetLedColour(led, BLUE));
+			break;
+		case GET_ROTATION:
+			I2C_Write((uint8_t)1);
+			RotaryEncoder_ResetRotation();
 			break;
 		default:
 			/* TODO: Runtime error? */
