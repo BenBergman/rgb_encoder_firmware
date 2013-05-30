@@ -6,7 +6,7 @@ extern "C"
 	#include "RotaryEncoder.h"
 }
 
-uint8_t encoderAddress = 0x03;
+static uint8_t encoderAddress = 0x03;
 
 uint8_t positiveStates[] = {0x02, 0x00, 0x01, 0x03};
 uint8_t negativeStates[] = {0x01, 0x00, 0x02, 0x03};

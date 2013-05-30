@@ -29,8 +29,16 @@ extern "C"
 	}
 }
 
+static uint8_t encoderAddress;
+
 TEST_GROUP(I2CSlaveDriver)
 {
+	void setup()
+	{
+		encoderAddress = 0x03;
+		RotaryEncoder_Create(&encoderAddress, 0, 1);
+	}
+
 	void teardown()
 	{
 		mock().checkExpectations();
@@ -140,8 +148,6 @@ TEST(I2CSlaveDriver, GetMultipleLedColours)
 
 static uint8_t positiveStates[] = {0x02, 0x00, 0x01, 0x03};
 
-static uint8_t encoderAddress;
-
 static void RotateFullPositiveNotches(int rotations)
 {
 	for (int i = 0; i < rotations * 4; i++) {
@@ -152,8 +158,6 @@ static void RotateFullPositiveNotches(int rotations)
 
 TEST(I2CSlaveDriver, GetSingleRotation)
 {
-	encoderAddress = 0x03;
-	RotaryEncoder_Create(&encoderAddress, 0, 1);
 	RotateFullPositiveNotches(1);
 
 	mock().expectOneCall("I2C_Read")
@@ -169,8 +173,6 @@ TEST(I2CSlaveDriver, GetSingleRotation)
 
 TEST(I2CSlaveDriver, GetMultipleRotations)
 {
-	encoderAddress = 0x03;
-	RotaryEncoder_Create(&encoderAddress, 0, 1);
 	RotateFullPositiveNotches(3);
 
 	mock().expectOneCall("I2C_Read")
