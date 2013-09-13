@@ -4,5 +4,7 @@
 *.map
 *.d
 *_tests
+.dep/
+.lib/
 lib/
 include/version.h

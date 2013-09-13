@@ -1,23 +1,26 @@
+CPP_U_TEST_MAKEFILE="MakefileCppUTest.mk"
+HARDWARE_MAKEFILE="myenergia.mk"
+
 all: codeCppUTest codeMsp430
 
 clean: cleanCodeCppUTest cleanCodeMsp430
 
-prog: program
+prog: upload
 
-program: codeMsp430
-	make -i -f MakefileMSP430.mk program
+upload: codeMsp430
+	make -i -f $(HARDWARE_MAKEFILE) upload
 
 codeCppUTest: CppUTest CppUTestExt version
-	make -i -f MakefileCppUTest.mk 
+	make -i -f $(CPP_U_TEST_MAKEFILE) 
 
 codeMsp430: version
-	make -i -f MakefileMSP430.mk
+	make -i -f $(HARDWARE_MAKEFILE)
 
 cleanCodeCppUTest:
-	make -i -f MakefileCppUTest.mk clean
+	make -i -f $(CPP_U_TEST_MAKEFILE) clean
 
 cleanCodeMsp430:
-	make -i -f MakefileMSP430.mk clean
+	make -i -f $(HARDWARE_MAKEFILE) clean
 
 CppUTest: CppUTest/lib/libCppUTest.a
 

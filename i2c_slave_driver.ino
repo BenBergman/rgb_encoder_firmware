@@ -1,7 +1,9 @@
-//#include <msp430g2553.h>   /* Genericizable */
-#include <msp430.h>
+extern "C" {
 #include "RgbLedDriver.h"
 #include "RotaryEncoder.h"
+}
+
+#include <Wire.h>
 
 void initializeEncoderRegisters(void)
 {
@@ -14,7 +16,7 @@ void initializeEncoderRegisters(void)
 
 void initializeLedRegisters(void)
 {
-	P1DIR = BIT0;
+	P1DIR |= BIT0;
 }
 
 void initializeClock(void)
@@ -32,7 +34,7 @@ void initializeClock(void)
 
 static int i = 0;
 
-void loop(void)
+void show_demo_pattern(int i)
 {
 	RgbLedDriver_TurnOn((1  - i + 16) % 16 + 1, 5, 1, 1);
 	RgbLedDriver_TurnOn((2  - i + 16) % 16 + 1, 1, 5, 1);
@@ -50,11 +52,25 @@ void loop(void)
 	RgbLedDriver_TurnOn((14 - i + 16) % 16 + 1, 1, 5, 1);
 	RgbLedDriver_TurnOn((15 - i + 16) % 16 + 1, 1, 1, 5);
 	RgbLedDriver_TurnOn((16 - i + 16) % 16 + 1, 5, 5, 5);
+}
+
+void loop(void)
+{
+//	show_demo_pattern(i);
 	RotaryEncoder_Read();
 	i = RotaryEncoder_GetRotation();
 }
 
-int main(void)
+void receiveEvent(int howMany)
+{
+	while(Wire.available()) {
+		/*char c =*/ Wire.read();
+	}
+	P1OUT ^= BIT1;
+//	__delay_cycles(1000000);
+}
+
+void setup(void)
 {
 	/* Hold the watchdog timer so it doesn't reset our chip */
 	WDTCTL = WDTPW + WDTHOLD;
@@ -64,9 +80,14 @@ int main(void)
 
 	RgbLedDriver_Create();
 	RotaryEncoder_Create((uint8_t *)(&P2IN), 6, 7);
+	Wire.begin(4);
+	Wire.onReceive(receiveEvent);
 
-	/* infinite loop */
-	for( ; ; ) {
-		loop();
-	}
+	P1DIR |= BIT1;
+	P1OUT &= ~(BIT1);
+	__delay_cycles(10000000);
+	P1OUT |= BIT1;
+	__delay_cycles(10000000);
+
+	show_demo_pattern(0);
 }
