@@ -6,26 +6,31 @@
 uint8_t command = 0;
 uint8_t led = 0;
 
-void I2CSlaveDriver_processCommand(void)
+void I2CSlaveDriver_processCommand(int numBytes)
 {
 	uint8_t red, green, blue;
 
-	command = I2C_Read();
+	int i;
+	for (i = 0; i < numBytes; i++) {
+		command = I2C_Read();
 
-	switch (command) {
-		case GET_LED_COLOUR:
-			led = I2C_Read();
-			break;
-		case SET_LED_COLOUR:
-			led = I2C_Read();
-			red = I2C_Read();
-			green = I2C_Read();
-			blue = I2C_Read();
-			RgbLedDriver_TurnOn(led, red, green, blue);
-			break;
-		default:
-			/* TODO: Runtime error? */
-			break;
+		switch (command) {
+			case GET_LED_COLOUR:
+				led = I2C_Read();
+				i++;
+				break;
+			case SET_LED_COLOUR:
+				led = I2C_Read();
+				red = I2C_Read();
+				green = I2C_Read();
+				blue = I2C_Read();
+				RgbLedDriver_TurnOn(led, red, green, blue);
+				i+=4;
+				break;
+			default:
+				/* TODO: Runtime error? */
+				break;
+		}
 	}
 }
 

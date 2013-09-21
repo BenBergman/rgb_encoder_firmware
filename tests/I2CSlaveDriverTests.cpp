@@ -51,7 +51,7 @@ TEST(I2CSlaveDriver, ProcessCommandReadsInCommandByte)
 	mock().expectOneCall("I2C_Read")
 		.andReturnValue((uint8_t)0xFF);
 
-	I2CSlaveDriver_processCommand();
+	I2CSlaveDriver_processCommand(1);
 }
 
 TEST(I2CSlaveDriver, GetVersionCommandReturnsVersion)
@@ -59,7 +59,7 @@ TEST(I2CSlaveDriver, GetVersionCommandReturnsVersion)
 	mock().expectOneCall("I2C_Read")
 		.andReturnValue((uint8_t)0x00);
 
-	I2CSlaveDriver_processCommand();
+	I2CSlaveDriver_processCommand(1);
 
 	mock().expectOneCall("I2C_WriteString")
 		.withParameter("data", RGB_ENCODER_FIRMWARE_VERSION);
@@ -80,7 +80,7 @@ TEST(I2CSlaveDriver, SetSingleLedCommandSetsSingleLed)
 	mock().expectOneCall("I2C_Read")
 		.andReturnValue((uint8_t)0x30);
 
-	I2CSlaveDriver_processCommand();
+	I2CSlaveDriver_processCommand(5);
 
 	CHECK_EQUAL(0x10, RgbLedDriver_GetLedColour(1, RED));
 	CHECK_EQUAL(0x20, RgbLedDriver_GetLedColour(1, GREEN));
@@ -96,7 +96,7 @@ TEST(I2CSlaveDriver, GetSingleLedColour)
 	mock().expectOneCall("I2C_Read")
 		.andReturnValue((uint8_t)1);
 
-	I2CSlaveDriver_processCommand();
+	I2CSlaveDriver_processCommand(2);
 
 	mock().expectOneCall("I2C_Write")
 		.withParameter("data", 0x50);
@@ -118,7 +118,7 @@ TEST(I2CSlaveDriver, GetMultipleLedColours)
 	mock().expectOneCall("I2C_Read")
 		.andReturnValue((uint8_t)7);
 
-	I2CSlaveDriver_processCommand();
+	I2CSlaveDriver_processCommand(2);
 
 	mock().expectOneCall("I2C_Write")
 		.withParameter("data", 0x50);
@@ -134,7 +134,7 @@ TEST(I2CSlaveDriver, GetMultipleLedColours)
 	mock().expectOneCall("I2C_Read")
 		.andReturnValue((uint8_t)8);
 
-	I2CSlaveDriver_processCommand();
+	I2CSlaveDriver_processCommand(2);
 
 	mock().expectOneCall("I2C_Write")
 		.withParameter("data", 0x05);
@@ -170,7 +170,7 @@ static void I2CGetRotation(uint8_t expectedValue)
 	mock().expectOneCall("I2C_Read")
 		.andReturnValue((uint8_t)0x20);
 
-	I2CSlaveDriver_processCommand();
+	I2CSlaveDriver_processCommand(1);
 
 	mock().expectOneCall("I2C_Write")
 		.withParameter("data", expectedValue);

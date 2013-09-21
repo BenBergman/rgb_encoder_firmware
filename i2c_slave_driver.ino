@@ -1,9 +1,8 @@
 extern "C" {
 #include "RgbLedDriver.h"
 #include "RotaryEncoder.h"
+#include "I2CSlaveDriver.h"
 }
-
-#include <Wire.h>
 
 void initializeEncoderRegisters(void)
 {
@@ -61,15 +60,6 @@ void loop(void)
 	i = RotaryEncoder_GetRotation();
 }
 
-void receiveEvent(int howMany)
-{
-	while(Wire.available()) {
-		/*char c =*/ Wire.read();
-	}
-	P1OUT ^= BIT1;
-//	__delay_cycles(1000000);
-}
-
 void setup(void)
 {
 	/* Hold the watchdog timer so it doesn't reset our chip */
@@ -80,8 +70,7 @@ void setup(void)
 
 	RgbLedDriver_Create();
 	RotaryEncoder_Create((uint8_t *)(&P2IN), 6, 7);
-	Wire.begin(4);
-	Wire.onReceive(receiveEvent);
+	I2C_Init(4, I2CSlaveDriver_processCommand);
 
 	P1DIR |= BIT1;
 	P1OUT &= ~(BIT1);

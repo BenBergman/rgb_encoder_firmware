@@ -142,7 +142,8 @@ SOURCES := $(INOFILE) \
 	$(wildcard *.c *.cc *.cpp) \
 	$(wildcard $(addprefix util/, *.c *.cc *.cpp)) \
 	$(wildcard $(addprefix utility/, *.c *.cc *.cpp)) \
-	$(wildcard $(addprefix src/, *.c *.cc *.cpp))
+	$(wildcard $(addprefix src/, *.c *.cc *.cpp)) \
+	$(wildcard $(addprefix src_prod/, *.c *.cc *.cpp))
 
 # automatically determine included libraries
 LIBRARIES := $(filter $(notdir $(wildcard $(HOME)/energia_sketchbook/libraries/*)), \
@@ -217,7 +218,7 @@ endif
 endif
 
 # flags
-CPPFLAGS := -Os -Wall
+CPPFLAGS := -Os -Wall -Wextra
 CPPFLAGS += -ffunction-sections -fdata-sections
 CPPFLAGS += -mmcu=$(BOARD_BUILD_MCU)
 CPPFLAGS += -DF_CPU=$(BOARD_BUILD_FCPU) -DARDUINO=$(ARDUINOCONST)  -DENERGIA=$(ENERGIACONST)
@@ -269,6 +270,7 @@ upload:
 
 clean:
 	rm -f $(OBJECTS)
+	rm -f $(ASM_OBJ)
 	rm -f $(TARGET).elf $(ENERGIALIB) *~
 	rm -rf .lib .dep
 
