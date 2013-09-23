@@ -1,5 +1,5 @@
 #---- Outputs ----#
-COMPONENT_NAME = BlinkTest
+COMPONENT_NAME = i2c_slave_driver
 
 #--- Inputs ----#
 CPPUTEST_USE_EXTENSIONS = Y
