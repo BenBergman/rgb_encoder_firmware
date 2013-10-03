@@ -10,7 +10,7 @@
 #define EXTERNC
 #endif
 
-EXTERNC void I2C_Init(uint8_t addr, void (*function)(int));
+EXTERNC void I2C_Init(uint8_t addr, void (*read_function)(int), void (*write_function)(void));
 EXTERNC bool I2C_DataAvailable(void);
 EXTERNC uint8_t I2C_Read(void);
 EXTERNC void I2C_Write(uint8_t data);

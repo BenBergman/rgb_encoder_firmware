@@ -70,7 +70,7 @@ void setup(void)
 
 	RgbLedDriver_Create();
 	RotaryEncoder_Create((uint8_t *)(&P2IN), 6, 7);
-	I2C_Init(4, I2CSlaveDriver_processCommand);
+	I2C_Init(4, I2CSlaveDriver_processCommand, I2CSlaveDriver_sendData);
 
 	P1DIR |= BIT1;
 	P1OUT &= ~(BIT1);

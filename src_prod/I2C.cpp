@@ -2,10 +2,11 @@
 #include <msp430.h>
 #include <Wire.h>
 
-void I2C_Init(uint8_t addr, void (*function)(int))
+void I2C_Init(uint8_t addr, void (*read_function)(int), void (*write_function)(void))
 {
 	Wire.begin(addr);
-	Wire.onReceive(function);
+	Wire.onReceive(read_function);
+	Wire.onRequest(write_function);
 }
 
 void I2C_Write(uint8_t data)
